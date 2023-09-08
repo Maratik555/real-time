@@ -1,21 +1,23 @@
-import React, {useRef, useState} from 'react'
+import React, {useId, useRef, useState} from 'react'
 
 const WebSock = () => {
   const [messages, setMessages] = useState([])
   const [value, setValue] = useState('')
-  const socket = useRef()
+  const socket = useRef(null)
   const [connected, setConnected] = useState(false)
   const [username, setUsername] = useState('')
+  const id = useId()
+
 
   function connect() {
-    socket.current = new WebSocket('ws://localhost:5000')
+    socket.current = new WebSocket('ws://localhost:5555')
 
     socket.current.onopen = () => {
       setConnected(true)
       const message = {
         event: 'connection',
         username,
-        id: Date.now()
+        id
       }
       socket.current.send(JSON.stringify(message))
     }
@@ -35,7 +37,7 @@ const WebSock = () => {
     const message = {
       username,
       message: value,
-      id: Date.now(),
+      id,
       event: 'message'
     }
     socket.current.send(JSON.stringify(message))
@@ -74,7 +76,8 @@ const WebSock = () => {
                   Пользователь {mess.username} подключился
                 </div>
                 : <div className="message">
-                  {mess.username}. {mess.message}
+                  {mess.username} <br/>
+                  {mess.message}
                 </div>
               }
             </div>

@@ -1,9 +1,10 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useId, useState} from 'react'
 import axios from 'axios'
 
 const LongPulling = () => {
   const [messages, setMessages] = useState([])
   const [value, setValue] = useState('')
+  const id = useId()
 
 
   useEffect(() => {
@@ -23,9 +24,10 @@ const LongPulling = () => {
   }
 
   const sendMessage = async () => {
+    setValue('')
     await axios.post('http://localhost:7777/new-messages', {
       message: value,
-      id: Date.now()
+      id
     })
   }
 
